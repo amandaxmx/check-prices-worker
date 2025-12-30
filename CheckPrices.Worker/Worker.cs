@@ -1,24 +1,17 @@
-namespace CheckPrices.Worker
+using CheckPrices.Application.UseCase;
+using CheckPrices.Domain.Domain;
+
+public class Worker
 {
-    public class Worker : BackgroundService
+    private readonly IGetProductsUseCase _getProductsUseCase;
+
+    public Worker(IGetProductsUseCase getProductsUseCase)
     {
-        private readonly ILogger<Worker> _logger;
+        _getProductsUseCase = getProductsUseCase;
+    }
 
-        public Worker(ILogger<Worker> logger)
-        {
-            _logger = logger;
-        }
-
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-        {
-            while (!stoppingToken.IsCancellationRequested)
-            {
-                if (_logger.IsEnabled(LogLevel.Information))
-                {
-                    _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                }
-                await Task.Delay(1000, stoppingToken);
-            }
-        }
+    public async Task RunAsync()
+    {
+        await _getProductsUseCase.ExecuteAsync();
     }
 }
