@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.300" />
+    <PackageReference Include="AWSSDK.SQS" Version="3.7.300.27" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CheckPrices.Application\CheckPrices.Application.csproj" />
+    <ProjectReference Include="..\CheckPrices.Infra\CheckPrices.Infra.csproj" />
   </ItemGroup>
 </Project>

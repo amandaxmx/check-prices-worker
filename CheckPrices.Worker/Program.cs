@@ -1,7 +1,28 @@
-using CheckPrices.Worker;
+using CheckPrices.Application.UseCase;
+using CheckPrices.Domain.Contracts;
+using CheckPrices.Domain.Domain;
+using CheckPrices.Infra.Repository;
+using CheckPrices.Infra.Services;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
-var builder = Host.CreateApplicationBuilder(args);
-builder.Services.AddHostedService<Worker>();
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        using IHost host = Host.CreateDefaultBuilder(args)
+            .ConfigureServices((context, services) =>
+            {
+                services.AddScoped<IGetProductsUseCase, GetProductsUseCase>();
+                services.AddScoped<IProductRepository, ProductRepository>();
+                services.AddScoped<IPriceCheckerService, PriceCheckerService>();
+                services.AddScoped<Worker>();
+            })
+            .Build();
 
-var host = builder.Build();
-host.Run();
+        using var scope = host.Services.CreateScope();
+        var worker = scope.ServiceProvider.GetRequiredService<Worker>();
+
+        await worker.RunAsync();
+    }
+}
