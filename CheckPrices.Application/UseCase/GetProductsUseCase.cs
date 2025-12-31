@@ -22,7 +22,7 @@ namespace CheckPrices.Application.UseCase
 
             foreach (var product in products)
             {
-                if (string.IsNullOrWhiteSpace("product.Url"))
+                if (string.IsNullOrWhiteSpace(product.Url))
                 {
                     updatedProducts.Add(product);
                     continue;
