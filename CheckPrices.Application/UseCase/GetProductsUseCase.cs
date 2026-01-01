@@ -15,7 +15,7 @@ namespace CheckPrices.Application.UseCase
             _priceCheckerService = priceCheckerService;
         }
 
-        public async Task<IEnumerable<Product>> ExecuteAsync() 
+        public async Task<Product> ExecuteAsync() 
         {
             var products = await _productRepository.GetProducts();
             var updatedProducts = new List<Product>();
@@ -24,25 +24,19 @@ namespace CheckPrices.Application.UseCase
             {
                 if (string.IsNullOrWhiteSpace(product.Url))
                 {
-                    updatedProducts.Add(product);
-                    continue;
+                    return null;
                 }
 
                 var newPrice = await _priceCheckerService.GetPriceFromUrlAsync(product.Url);
 
-                if (newPrice.HasValue && newPrice.Value != product.Price)
+                if (newPrice.HasValue && newPrice.Value < product.Price)
                 {
-                    var updatedProduct = new Product(product.Name, product.Url, newPrice.Value, product.Active);
-                    updatedProduct.SetId(product.Id);
-                    updatedProducts.Add(updatedProduct);
+                    product.SetNewPrice(newPrice.Value, product);
+                    return product;
                 }
-                else
-                {
-                    updatedProducts.Add(product);
-                }
-            }
 
-            return updatedProducts;
+            }
+            return null;
         }
     }
 }

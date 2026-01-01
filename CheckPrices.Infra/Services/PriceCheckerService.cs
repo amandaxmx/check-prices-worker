@@ -15,6 +15,7 @@ namespace CheckPrices.Infra.Services
             try
             {
                 var page = await browser.NewPageAsync();
+                
                 await page.GotoAsync(url);
 
                 var priceSelectors = new[] {
@@ -51,7 +52,7 @@ namespace CheckPrices.Infra.Services
                 }
                 else
                 {
-                    Console.WriteLine($"Valor bruto: {priceText}");
+                    priceText = priceText.Replace("R$", "");
                 }
 
                 await page.CloseAsync();

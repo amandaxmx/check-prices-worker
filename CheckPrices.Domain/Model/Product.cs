@@ -30,14 +30,15 @@ namespace CheckPrices.Domain.Model
 
         private Product() { }
 
-        public void SetId(int id)
+        public Product SetNewPrice(decimal newPrice, Product product)
         {
-            if (Id != 0)
-                throw new InvalidOperationException("O Id do produto já foi definido.");
-            if (id <= 0)
-                throw new ArgumentException("O Id do produto deve ser um número positivo.", nameof(id));
-
-            Id = id;
+            if (newPrice < product.Price)
+            {
+                product.Price = newPrice;
+                product.Active = "N";
+                return product;
+            }
+            return product;
         }
     }
 }

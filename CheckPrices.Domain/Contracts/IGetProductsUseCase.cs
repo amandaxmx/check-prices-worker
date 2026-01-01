@@ -9,6 +9,6 @@ namespace CheckPrices.Domain.Domain
 {
     public interface IGetProductsUseCase
     {
-        Task<IEnumerable<Product>> ExecuteAsync();
+        Task<Product> ExecuteAsync();
     }
 }
